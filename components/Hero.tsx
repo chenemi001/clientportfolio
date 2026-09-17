@@ -239,10 +239,12 @@ export default function Hero() {
           <div
             className="
               absolute
-              left-[4%]
+              left-1/2
               top-[12%]
               z-40
               w-[92%]
+              -translate-x-1/2
+              text-center
               sm:hidden
             "
           >
@@ -379,6 +381,7 @@ export default function Hero() {
                 delay: 0.4,
               }}
               className="
+                mx-auto
                 mt-[18px]
                 max-w-[280px]
                 font-[var(--font-sans)]

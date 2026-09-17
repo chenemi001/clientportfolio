@@ -32,11 +32,28 @@ export default function HeroAboutTransition() {
    * VISIBILITY
    *
    * Visible through Hero + About.
-   * Hidden once About ends.
+   * On mobile, faded out earlier (once the reader has scrolled
+   * past the intro/stats) so the pinned portrait never sits on
+   * top of the contact/download-CV area of the single column
+   * layout — on desktop the two-column layout has room for it
+   * for the full About section.
    * =========================================================
    */
 
   const visibilityProgress = useMotionValue(1);
+
+  /*
+   * =========================================================
+   * FLIP PROGRESS
+   *
+   * Independent of the Hero → About movement: this starts
+   * advancing the instant the page is scrolled at all, so the
+   * flip is already underway well before the portrait begins
+   * moving toward its About position.
+   * =========================================================
+   */
+
+  const flipProgress = useMotionValue(0);
 
   /*
    * =========================================================
@@ -49,6 +66,8 @@ export default function HeroAboutTransition() {
       const about = document.getElementById("about");
 
       if (!about) return;
+
+      const isMobile = window.innerWidth < 640;
 
       const aboutTop =
         about.getBoundingClientRect().top + window.scrollY;
@@ -99,32 +118,52 @@ export default function HeroAboutTransition() {
 
       /*
        * =====================================================
-       * INSIDE ABOUT
+       * INSIDE / AFTER ABOUT
        *
-       * Stay completely still at the About position.
-       * =====================================================
-       */
-
-      else if (currentScroll <= aboutBottom) {
-        movement = 1;
-      }
-
-      /*
-       * =====================================================
-       * AFTER ABOUT
-       *
-       * Do not move to Projects.
-       * Hide the portrait.
+       * Stay completely still at the About position, only the
+       * visibility keeps changing past this point.
        * =====================================================
        */
 
       else {
         movement = 1;
-        visibility = 0;
       }
+
+      /*
+       * On mobile, About stacks a lot of content (heading,
+       * intro, stats, contact, socials, CV button) in one
+       * narrow column with nowhere for a pinned photo to sit
+       * without covering something. So there it's purely a
+       * Hero → About transition: it fades out over the last
+       * stretch of the Hero → About movement, fully gone by
+       * the time it would reach the About position, instead of
+       * lingering on top of the content.
+       */
+
+      visibility = isMobile
+        ? 1 - Math.min(1, Math.max(0, (movement - 0.6) / 0.4))
+        : currentScroll <= aboutBottom
+        ? 1
+        : 0;
+
+      /*
+       * =====================================================
+       * FLIP
+       *
+       * Tied directly to raw scroll distance from the very top
+       * of the page, so it begins the moment scrolling starts
+       * rather than waiting for the About transition.
+       * =====================================================
+       */
+
+      const flip = Math.min(
+        1,
+        Math.max(0, currentScroll / (window.innerHeight * 0.9))
+      );
 
       movementProgress.set(movement);
       visibilityProgress.set(visibility);
+      flipProgress.set(flip);
     };
 
     updateProgress();
@@ -134,7 +173,7 @@ export default function HeroAboutTransition() {
     return () => {
       window.removeEventListener("resize", updateProgress);
     };
-  }, [movementProgress, visibilityProgress]);
+  }, [movementProgress, visibilityProgress, flipProgress]);
 
   /*
    * =========================================================
@@ -146,6 +185,8 @@ export default function HeroAboutTransition() {
     const about = document.getElementById("about");
 
     if (!about) return;
+
+    const isMobile = window.innerWidth < 640;
 
     const aboutTop =
       about.getBoundingClientRect().top + window.scrollY;
@@ -165,7 +206,6 @@ export default function HeroAboutTransition() {
     const currentScroll = scrollY.get();
 
     let movement = 0;
-    let visibility = 1;
 
     /*
      * =====================================================
@@ -175,7 +215,6 @@ export default function HeroAboutTransition() {
 
     if (currentScroll <= startMove) {
       movement = 0;
-      visibility = 1;
     }
 
     /*
@@ -193,38 +232,43 @@ export default function HeroAboutTransition() {
         1,
         Math.max(0, movement)
       );
-
-      visibility = 1;
     }
 
     /*
      * =====================================================
-     * ABOUT
+     * INSIDE / AFTER ABOUT
      *
-     * LOCKED HERE.
-     * =====================================================
-     */
-
-    else if (currentScroll <= aboutBottom) {
-      movement = 1;
-      visibility = 1;
-    }
-
-    /*
-     * =====================================================
-     * AFTER ABOUT
-     *
-     * Hide it completely.
+     * LOCKED HERE. Only visibility keeps changing.
      * =====================================================
      */
 
     else {
       movement = 1;
-      visibility = 0;
     }
+
+    const visibility = isMobile
+      ? 1 - Math.min(1, Math.max(0, (movement - 0.6) / 0.4))
+      : currentScroll <= aboutBottom
+      ? 1
+      : 0;
+
+    /*
+     * =====================================================
+     * FLIP
+     *
+     * Raw scroll distance from the top of the page — starts
+     * the instant scrolling starts, on mobile and desktop.
+     * =====================================================
+     */
+
+    const flip = Math.min(
+      1,
+      Math.max(0, currentScroll / (window.innerHeight * 0.9))
+    );
 
     movementProgress.set(movement);
     visibilityProgress.set(visibility);
+    flipProgress.set(flip);
   });
 
   /*
@@ -248,6 +292,18 @@ export default function HeroAboutTransition() {
   const opacity = useSpring(visibilityProgress, {
     stiffness: 100,
     damping: 25,
+  });
+
+  /*
+   * =========================================================
+   * SMOOTH FLIP
+   * =========================================================
+   */
+
+  const flipSpring = useSpring(flipProgress, {
+    stiffness: 80,
+    damping: 22,
+    mass: 0.4,
   });
 
   /*
@@ -301,14 +357,14 @@ export default function HeroAboutTransition() {
    */
 
   const frontRotate = useTransform(
-    progress,
-    [0.25, 0.65],
+    flipSpring,
+    [0, 1],
     [0, 180]
   );
 
   const backRotate = useTransform(
-    progress,
-    [0.25, 0.65],
+    flipSpring,
+    [0, 1],
     [180, 360]
   );
 
@@ -344,7 +400,7 @@ export default function HeroAboutTransition() {
           pointer-events-none
           fixed
           left-1/2
-          top-[48%]
+          top-[34%]
           z-30
           h-[430px]
           w-[260px]
