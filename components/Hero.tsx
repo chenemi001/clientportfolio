@@ -18,7 +18,7 @@ export default function Hero() {
   ========================================================= */
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem("abegnego-theme");
+    const savedTheme = window.localStorage.getItem("ufedo-theme");
 
     if (savedTheme === "dark") {
       setDarkMode(true);
@@ -249,7 +249,7 @@ export default function Hero() {
             "
           >
             {/* =================================================
-                ABEGNEGO AUDU
+                UFEDO AUDU
             ================================================== */}
 
             <motion.div
@@ -282,7 +282,7 @@ export default function Hero() {
                   tracking-[0]
                 "
               >
-                ABEGNEGO AUDU
+                UFEDO AUDU
               </span>
             </motion.div>
 
@@ -397,7 +397,7 @@ export default function Hero() {
 
 
           {/* =================================================
-              DESKTOP ABEGNEGO AUDU
+              DESKTOP UFEDO AUDU
           ================================================== */}
 
           <motion.div
@@ -442,7 +442,7 @@ export default function Hero() {
                 lg:text-[30px]
               "
             >
-              ABEGNEGO AUDU
+              UFEDO AUDU
             </span>
           </motion.div>
 

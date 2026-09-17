@@ -447,7 +447,7 @@ export default function HeroAboutTransition() {
           >
             <Image
               src="/images/new.png"
-              alt="Abegnego Audu"
+              alt="Ufedo Audu"
               fill
               priority
               sizes="
@@ -486,7 +486,7 @@ export default function HeroAboutTransition() {
           >
             <Image
               src="/images/second.jpg"
-              alt="Abegnego Audu"
+              alt="Ufedo Audu"
               fill
               sizes="
                 (max-width: 640px) 220px,

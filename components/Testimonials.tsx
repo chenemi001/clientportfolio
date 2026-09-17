@@ -6,7 +6,7 @@ import { Quote, ArrowUpRight } from "lucide-react";
 const testimonials = [
   {
     quote:
-      "Abegnego brought a strong platform engineering mindset to our infrastructure work. He consistently focused on creating reliable systems that made it easier for engineering teams to ship and operate services.",
+      "Ufedo brought a strong platform engineering mindset to our infrastructure work. He consistently focused on creating reliable systems that made it easier for engineering teams to ship and operate services.",
     name: "Engineering Leader",
     role: "Platform & Infrastructure",
   },
@@ -18,7 +18,7 @@ const testimonials = [
   },
   {
     quote:
-      "Abegnego combines cloud infrastructure, Kubernetes, automation, and observability with a clear focus on developer experience. His approach helped improve both reliability and operational efficiency.",
+      "Ufedo combines cloud infrastructure, Kubernetes, automation, and observability with a clear focus on developer experience. His approach helped improve both reliability and operational efficiency.",
     name: "Senior Engineering Manager",
     role: "Cloud & SRE",
   },

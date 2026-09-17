@@ -1,4 +1,4 @@
-# Abegnego Audu — Senior Platform Engineer Portfolio
+# Ufedo Audu — Senior Platform Engineer Portfolio
 
 > A high-performance, interactive portfolio showcasing platform engineering, cloud infrastructure, Kubernetes, internal developer platforms, DevOps automation, SRE, and AI agent engineering.
 

@@ -39,7 +39,7 @@ export default function Navbar() {
   ========================================================= */
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem("abegnego-theme");
+    const savedTheme = window.localStorage.getItem("ufedo-theme");
     const isDark = savedTheme === "dark";
 
     setDarkMode(isDark);
@@ -58,7 +58,7 @@ export default function Navbar() {
   const next = !darkMode;
 
   window.localStorage.setItem(
-    "abegnego-theme",
+    "ufedo-theme",
     next ? "dark" : "light"
   );
 
@@ -206,7 +206,7 @@ export default function Navbar() {
               >
                 <Image
                   src="/images/new.png"
-                  alt="Abegnego Audu"
+                  alt="Ufedo Audu"
                   fill
                   priority
                   sizes="46px"
@@ -300,7 +300,7 @@ export default function Navbar() {
               >
                 <Image
                   src="/images/new.png"
-                  alt="Abegnego Audu"
+                  alt="Ufedo Audu"
                   fill
                   sizes="48px"
                   className="object-cover"
@@ -366,7 +366,7 @@ export default function Navbar() {
           >
             <Image
               src="/images/new.png"
-              alt="Abegnego Audu"
+              alt="Ufedo Audu"
               fill
               priority
               sizes="48px"
@@ -430,7 +430,7 @@ export default function Navbar() {
                     : "text-[#292929]"
                 }`}
               >
-                Abegnego Audu
+                Ufedo Audu
               </motion.span>
             )}
           </AnimatePresence>

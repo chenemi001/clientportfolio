@@ -88,7 +88,7 @@ export default function Footer() {
               href="#home"
               className="inline-block text-3xl font-semibold tracking-[-0.05em]"
             >
-              ABEGNEGO
+              UFEDO
               <span style={{ color: "var(--footer-accent)" }}>.</span>
             </a>
 
@@ -201,7 +201,7 @@ export default function Footer() {
             className="select-none whitespace-nowrap text-[16vw] font-semibold leading-[0.75] tracking-[-0.09em] opacity-[0.04] dark:opacity-[0.06]"
             aria-hidden="true"
           >
-            ABEGNEGO
+            UFEDO
           </p>
         </div>
 
@@ -214,7 +214,7 @@ export default function Footer() {
           }}
         >
           <p>
-            © {new Date().getFullYear()} Abegnego Audu. All rights reserved.
+            © {new Date().getFullYear()} Ufedo Audu. All rights reserved.
           </p>
 
           <div className="flex items-center gap-5">

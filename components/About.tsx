@@ -177,7 +177,7 @@ export default function About() {
             sm:text-[18px]
           "
         >
-          Hi, I&apos;m Abegnego — a Senior Platform Engineer and AI Agent &
+          Hi, I&apos;m Ufedo — a Senior Platform Engineer and AI Agent &
           IDP Specialist passionate about building reliable infrastructure,
           intelligent automation and developer platforms that make complex
           systems easier to use.
@@ -198,7 +198,7 @@ export default function About() {
             sm:gap-12
           "
         >
-          {/* 15 */}
+          {/* 7 */}
 
           <motion.div
             initial={{
@@ -217,7 +217,7 @@ export default function About() {
               duration: 0.7,
             }}
           >
-            <Counter value={15} />
+            <Counter value={7} />
 
             <p
               className="

@@ -17,9 +17,9 @@ const sansFont = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Abegnego Audu — Platform Engineer",
+  title: "Ufedo Audu — Platform Engineer",
   description:
-    "Abegnego Audu — Platform Engineer building scalable infrastructure, developer platforms, automation, and reliable systems.",
+    "Ufedo Audu — Platform Engineer building scalable infrastructure, developer platforms, automation, and reliable systems.",
 };
 
 export default function RootLayout({
@@ -35,7 +35,7 @@ export default function RootLayout({
             __html: `
               (function () {
                 try {
-                  var theme = localStorage.getItem("abegnego-theme");
+                  var theme = localStorage.getItem("ufedo-theme");
 
                   if (theme === "dark") {
                     document.documentElement.classList.add("dark");
