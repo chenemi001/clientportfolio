@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   motion,
   useMotionValue,
@@ -229,9 +228,173 @@ export default function Hero() {
             sm:px-8
             lg:px-10
           "
-        >
+        >{/* ================================================= 
+              MOBILE HERO CONTENT
+              
+              Mobile only:
+              Name + Platform + Engineer + sentence
+              are kept together in one invisible container.
+          ================================================== */}
+
+          <div
+            className="
+              absolute
+              left-[4%]
+              top-[12%]
+              z-40
+              w-[92%]
+              sm:hidden
+            "
+          >
+            {/* =================================================
+                ABEGNEGO AUDU
+            ================================================== */}
+
+            <motion.div
+              style={{
+                opacity: titleOpacity,
+              }}
+              initial={{
+                opacity: 0,
+                y: 12,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.8,
+                delay: 0.15,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <span
+                className="
+                  block
+                  whitespace-nowrap
+                  font-[var(--font-display)]
+                  text-[17px]
+                  font-normal
+                  uppercase
+                  leading-[0.8]
+                  tracking-[0]
+                "
+              >
+                ABEGNEGO AUDU
+              </span>
+            </motion.div>
+
+            {/* =================================================
+                PLATFORM
+            ================================================== */}
+
+            <motion.h1
+              style={{
+                x: platformX,
+                opacity: titleOpacity,
+              }}
+              initial={{
+                opacity: 0,
+                x: -45,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                duration: 1,
+                delay: 0.08,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="
+                mt-[22px]
+                whitespace-nowrap
+                font-[var(--font-display)]
+                text-[2.4rem]
+                font-normal
+                uppercase
+                leading-[0.78]
+                tracking-[-0.012em]
+              "
+            >
+              PLATFORM
+            </motion.h1>
+
+            {/* =================================================
+                ENGINEER
+            ================================================== */}
+
+            <motion.h2
+              style={{
+                x: engineerX,
+                opacity: titleOpacity,
+              }}
+              initial={{
+                opacity: 0,
+                x: 45,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                duration: 1,
+                delay: 0.15,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="
+                mt-[6px]
+                whitespace-nowrap
+                font-[var(--font-display)]
+                text-[2.4rem]
+                font-normal
+                uppercase
+                leading-[0.78]
+                tracking-[-0.012em]
+              "
+            >
+              ENGINEER
+            </motion.h2>
+
+            {/* =================================================
+                ONE SENTENCE
+            ================================================== */}
+
+            <motion.p
+              style={{
+                y: descriptionY,
+                opacity: descriptionOpacity,
+                color: muted,
+              }}
+              initial={{
+                opacity: 0,
+                y: 12,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.7,
+                delay: 0.4,
+              }}
+              className="
+                mt-[18px]
+                max-w-[280px]
+                font-[var(--font-sans)]
+                text-[12px]
+                leading-[1.45]
+              "
+            >
+              I am a UK based Senior Platform Engineer and
+              <br />
+              AI Agent & IDP Specialist
+            </motion.p>
+          </div>
+
+
           {/* =================================================
-              ABEGNEGO AUDU
+              DESKTOP ABEGNEGO AUDU
           ================================================== */}
 
           <motion.div
@@ -253,9 +416,11 @@ export default function Hero() {
             }}
             className="
               absolute
-              left-[1%]
+              left-[4%]
               top-[35%]
               z-40
+              hidden
+              sm:block
               sm:left-[4%]
               lg:left-[3.5%]
             "
@@ -265,12 +430,12 @@ export default function Hero() {
                 block
                 whitespace-nowrap
                 font-[var(--font-display)]
-                text-[80px]
+                text-[17px]
                 font-normal
                 uppercase
                 leading-[0.8]
                 tracking-[0]
-                sm:text-[27px]
+                sm:text-[24px]
                 lg:text-[30px]
               "
             >
@@ -279,8 +444,8 @@ export default function Hero() {
           </motion.div>
 
           {/* =================================================
-              PLATFORM
-
+              DESKTOP PLATFORM
+              
               IMPORTANT:
               Right edge is deliberately kept away from image.
           ================================================== */}
@@ -305,11 +470,14 @@ export default function Hero() {
             }}
             className="
               absolute
-              left-[1%]
+              left-[4%]
               top-[43%]
               z-10
-              w-[calc(50%-190px)]
+              hidden
+              sm:block
+              w-[92%]
               sm:left-[3%]
+              sm:w-[calc(50%-190px)]
               lg:left-[3%]
             "
           >
@@ -317,11 +485,12 @@ export default function Hero() {
               className="
                 whitespace-nowrap
                 font-[var(--font-display)]
-                text-[clamp(5.2rem,7vw,7.6rem)]
+                text-[2.4rem]
                 font-normal
                 uppercase
                 leading-[0.78]
                 tracking-[-0.012em]
+                sm:text-[clamp(5.2rem,7vw,7.6rem)]
               "
             >
               PLATFORM
@@ -329,53 +498,8 @@ export default function Hero() {
           </motion.div>
 
           {/* =================================================
-              IMAGE
-          ================================================== */}
-
-          <div
-            className="
-              absolute
-              left-1/2
-              top-[12%]
-              z-30
-              h-[475px]
-              w-[320px]
-              -translate-x-1/2
-              sm:h-[500px]
-              sm:w-[340px]
-              lg:h-[525px]
-              lg:w-[355px]
-            "
-          >
-            <motion.div
-              style={{
-                scale: imageScale,
-              }}
-              className="
-                absolute
-                inset-0
-                overflow-hidden
-                rounded-[17px]
-              "
-            >
-              <Image
-                src="/images/new.png"
-                alt="Abegnego Audu"
-                fill
-                priority
-                sizes="
-                  (max-width: 640px) 320px,
-                  (max-width: 1024px) 340px,
-                  355px
-                "
-                className="object-cover object-center"
-              />
-            </motion.div>
-          </div>
-
-          {/* =================================================
-              ENGINEER
-
+              DESKTOP ENGINEER
+              
               Deliberately starts immediately after image.
           ================================================== */}
 
@@ -399,10 +523,13 @@ export default function Hero() {
             }}
             className="
               absolute
-              left-[calc(50%+125px)]
-              top-[43%]
+              left-[4%]
+              top-[49%]
               z-10
+              hidden
+              sm:block
               sm:left-[calc(50%+135px)]
+              sm:top-[43%]
               lg:left-[calc(50%+160px)]
             "
           >
@@ -410,11 +537,12 @@ export default function Hero() {
               className="
                 whitespace-nowrap
                 font-[var(--font-display)]
-                text-[clamp(5.2rem,7vw,7.6rem)]
+                text-[2.4rem]
                 font-normal
                 uppercase
                 leading-[0.78]
                 tracking-[-0.012em]
+                sm:text-[clamp(5.2rem,7vw,7.6rem)]
               "
             >
               ENGINEER
@@ -422,7 +550,7 @@ export default function Hero() {
           </motion.div>
 
           {/* =================================================
-              ONE SENTENCE
+              DESKTOP ONE SENTENCE
           ================================================== */}
 
           <motion.p
@@ -443,24 +571,29 @@ export default function Hero() {
               duration: 0.7,
               delay: 0.4,
             }}
-           className="
-  absolute
-  left-[calc(50%+180px)]
-  top-[58%]
-  z-40
-  w-[420px]
-  font-[var(--font-sans)]
-  text-[18px]
-  leading-[1.45]
-  sm:left-[calc(50%+190px)]
-  sm:w-[440px]
-  lg:left-[calc(50%+200px)]
-  lg:w-[460px]
-"
+            className="
+              absolute
+              left-[4%]
+              top-[57%]
+              z-40
+              hidden
+              sm:block
+              w-[88%]
+              max-w-[300px]
+              font-[var(--font-sans)]
+              text-[12px]
+              leading-[1.45]
+              sm:left-[calc(50%+190px)]
+              sm:w-[440px]
+              sm:max-w-none
+              sm:text-[18px]
+              lg:left-[calc(50%+200px)]
+              lg:w-[460px]
+            "
           >
-           I am a UK based Senior Platform Engineer and
-  <br />
-  AI Agent & IDP Specialist
+            I am a UK based Senior Platform Engineer and
+            <br />
+            AI Agent & IDP Specialist
           </motion.p>
 
           {/* =================================================
@@ -474,22 +607,27 @@ export default function Hero() {
             }}
             className="
               absolute
-              left-[8%]
-              top-[56%]
+              left-[4%]
+              top-[70%]
               z-40
-              w-[360px]
+              w-[88%]
+              max-w-[360px]
               sm:left-[10%]
+              sm:top-[56%]
+              sm:max-w-none
               lg:left-[11%]
             "
           >
             <p
               className="
-                mb-4
+                mb-3
                 font-[var(--font-sans)]
-                text-[10px]
+                text-[9px]
                 font-medium
                 uppercase
                 tracking-[0.16em]
+                sm:mb-4
+                sm:text-[10px]
               "
               style={{
                 color: accent,
@@ -501,11 +639,12 @@ export default function Hero() {
             <h3
               className="
                 font-[var(--font-display)]
-                text-[clamp(3rem,4vw,4.5rem)]
+                text-[2.7rem]
                 font-normal
                 uppercase
                 leading-[0.82]
                 tracking-[-0.005em]
+                sm:text-[clamp(3rem,4vw,4.5rem)]
               "
             >
               BUILD.
@@ -516,91 +655,7 @@ export default function Hero() {
             </h3>
           </motion.div>
 
-          {/* =================================================
-              HI / WHITE HAND
-          ================================================== */}
-
-          <motion.div
-            style={{
-              y: helloY,
-              scale: helloScale,
-            }}
-            className="
-              absolute
-              left-[28%]
-              top-[76%]
-              z-[100]
-              flex
-              h-[105px]
-              w-[105px]
-              items-center
-              justify-center
-              rounded-full
-              sm:h-[115px]
-              sm:w-[115px]
-              lg:left-[31%]
-            "
-            animate={{
-              backgroundColor: accent,
-            }}
-            transition={{
-              duration: 0.7,
-            }}
-          >
-            {showHand ? (
-              <motion.span
-                key="hand"
-                initial={{
-                  opacity: 0,
-                  scale: 0.65,
-                  rotate: -12,
-                }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  rotate: 0,
-                }}
-                transition={{
-                  duration: 0.55,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="
-                  select-none
-                  text-[48px]
-                  leading-none
-                  grayscale
-                  brightness-0
-                  invert
-                "
-              >
-                👋
-              </motion.span>
-            ) : (
-              <motion.span
-                key="hi"
-                initial={{
-                  opacity: 0,
-                  scale: 0.65,
-                }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                }}
-                transition={{
-                  duration: 0.5,
-                }}
-                className="
-                  font-[var(--font-sans)]
-                  text-[37px]
-                  font-medium
-                  tracking-[-0.07em]
-                  text-white
-                "
-              >
-                Hi
-              </motion.span>
-            )}
-          </motion.div>
+          
 
           {/* =================================================
               SCROLL INDICATOR
@@ -636,9 +691,10 @@ export default function Hero() {
               <span
                 className="
                   font-[var(--font-sans)]
-                  text-[9px]
+                  text-[8px]
                   uppercase
                   tracking-[0.16em]
+                  sm:text-[9px]
                 "
                 style={{
                   color: muted,

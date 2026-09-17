@@ -205,7 +205,7 @@ export default function Navbar() {
                 className="relative h-[46px] w-[46px] shrink-0 overflow-hidden rounded-full"
               >
                 <Image
-                  src="/images/profile.jpeg"
+                  src="/images/new.png"
                   alt="Abegnego Audu"
                   fill
                   priority
@@ -299,7 +299,7 @@ export default function Navbar() {
                 className="relative h-[48px] w-[48px] shrink-0 overflow-hidden rounded-full"
               >
                 <Image
-                  src="/images/profile.jpeg"
+                  src="/images/new.png"
                   alt="Abegnego Audu"
                   fill
                   sizes="48px"
@@ -365,7 +365,7 @@ export default function Navbar() {
             className="relative h-[48px] w-[48px] overflow-hidden rounded-full"
           >
             <Image
-              src="/images/profile.jpeg"
+              src="/images/new.png"
               alt="Abegnego Audu"
               fill
               priority

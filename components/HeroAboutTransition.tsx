@@ -18,11 +18,31 @@ export default function HeroAboutTransition() {
 
   /*
    * =========================================================
-   * ACTUAL ABOUT SECTION POSITION
+   * MOVEMENT PROGRESS
+   *
+   * 0 = HERO
+   * 1 = ABOUT
    * =========================================================
    */
 
   const movementProgress = useMotionValue(0);
+
+  /*
+   * =========================================================
+   * VISIBILITY
+   *
+   * Visible through Hero + About.
+   * Hidden once About ends.
+   * =========================================================
+   */
+
+  const visibilityProgress = useMotionValue(1);
+
+  /*
+   * =========================================================
+   * CALCULATE POSITION
+   * =========================================================
+   */
 
   useEffect(() => {
     const updateProgress = () => {
@@ -33,82 +53,78 @@ export default function HeroAboutTransition() {
       const aboutTop =
         about.getBoundingClientRect().top + window.scrollY;
 
-      const aboutHeight = about.offsetHeight;
-      const aboutBottom = aboutTop + aboutHeight;
+      const aboutBottom =
+        aboutTop + about.offsetHeight;
+
+      /*
+       * Start moving before About enters the viewport.
+       */
 
       const startMove = Math.max(
         0,
         aboutTop - window.innerHeight * 0.8
       );
 
-      /*
-       * Portrait reaches its About position shortly after
-       * entering the About section.
-       */
-      const pauseStart =
-        aboutTop + window.innerHeight * 0.05;
-
-      /*
-       * Hold the portrait in About Me.
-       */
-      const pauseEnd =
-        aboutTop + window.innerHeight * 0.45;
-
-      /*
-       * Return/flip back BEFORE leaving About.
-       */
-      const returnEnd =
-        aboutTop + window.innerHeight * 0.75;
-
       const currentScroll = window.scrollY;
 
-      let value = 0;
+      let movement = 0;
+      let visibility = 1;
 
       /*
-       * HERO
+       * =====================================================
+       * BEFORE HERO → ABOUT
+       * =====================================================
        */
+
       if (currentScroll <= startMove) {
-        value = 0;
+        movement = 0;
       }
 
       /*
+       * =====================================================
        * HERO → ABOUT
+       * =====================================================
        */
-      else if (currentScroll < pauseStart) {
-        value =
+
+      else if (currentScroll < aboutTop) {
+        movement =
           (currentScroll - startMove) /
-          (pauseStart - startMove);
+          (aboutTop - startMove);
 
-        value = Math.min(1, Math.max(0, value));
+        movement = Math.min(
+          1,
+          Math.max(0, movement)
+        );
       }
 
       /*
-       * ABOUT HOLD
+       * =====================================================
+       * INSIDE ABOUT
+       *
+       * Stay completely still at the About position.
+       * =====================================================
        */
-      else if (currentScroll <= pauseEnd) {
-        value = 1;
+
+      else if (currentScroll <= aboutBottom) {
+        movement = 1;
       }
 
       /*
-       * RETURN INSIDE ABOUT
-       */
-      else if (currentScroll < returnEnd) {
-        value =
-          1 -
-          (currentScroll - pauseEnd) /
-            (returnEnd - pauseEnd);
-
-        value = Math.min(1, Math.max(0, value));
-      }
-
-      /*
+       * =====================================================
        * AFTER ABOUT
+       *
+       * Do not move to Projects.
+       * Hide the portrait.
+       * =====================================================
        */
+
       else {
-        value = 0;
+        movement = 1;
+        visibility = 0;
       }
 
-      movementProgress.set(value);
+      movementProgress.set(movement);
+      visibilityProgress.set(visibility);
     };
 
     updateProgress();
@@ -118,11 +134,11 @@ export default function HeroAboutTransition() {
     return () => {
       window.removeEventListener("resize", updateProgress);
     };
-  }, [movementProgress]);
+  }, [movementProgress, visibilityProgress]);
 
   /*
    * =========================================================
-   * RECALCULATE ON SCROLL
+   * UPDATE ON SCROLL
    * =========================================================
    */
 
@@ -134,83 +150,81 @@ export default function HeroAboutTransition() {
     const aboutTop =
       about.getBoundingClientRect().top + window.scrollY;
 
-    const aboutHeight = about.offsetHeight;
-    const aboutBottom = aboutTop + aboutHeight;
+    const aboutBottom =
+      aboutTop + about.offsetHeight;
+
+    /*
+     * Start movement before About.
+     */
 
     const startMove = Math.max(
       0,
       aboutTop - window.innerHeight * 0.8
     );
 
-    const pauseStart =
-      aboutTop + window.innerHeight * 0.05;
-
-    /*
-     * Portrait pauses here beside About Me.
-     */
-    const pauseEnd =
-      aboutTop + window.innerHeight * 0.45;
-
-    /*
-     * Portrait flips back and leaves the transition
-     * while still inside About.
-     */
-    const returnEnd =
-      aboutTop + window.innerHeight * 0.75;
-
     const currentScroll = scrollY.get();
 
-    let value = 0;
+    let movement = 0;
+    let visibility = 1;
 
     /*
+     * =====================================================
      * HERO
+     * =====================================================
      */
+
     if (currentScroll <= startMove) {
-      value = 0;
+      movement = 0;
+      visibility = 1;
     }
 
     /*
+     * =====================================================
      * HERO → ABOUT
+     * =====================================================
      */
-    else if (currentScroll < pauseStart) {
-      value =
-        (currentScroll - startMove) /
-        (pauseStart - startMove);
 
-      value = Math.min(1, Math.max(0, value));
+    else if (currentScroll < aboutTop) {
+      movement =
+        (currentScroll - startMove) /
+        (aboutTop - startMove);
+
+      movement = Math.min(
+        1,
+        Math.max(0, movement)
+      );
+
+      visibility = 1;
     }
 
     /*
+     * =====================================================
      * ABOUT
      *
-     * HOLD
+     * LOCKED HERE.
+     * =====================================================
      */
-    else if (currentScroll <= pauseEnd) {
-      value = 1;
+
+    else if (currentScroll <= aboutBottom) {
+      movement = 1;
+      visibility = 1;
     }
 
     /*
-     * FLIP BACK + RETURN
+     * =====================================================
+     * AFTER ABOUT
      *
-     * This happens BEFORE Projects.
+     * Hide it completely.
+     * =====================================================
      */
-    else if (currentScroll < returnEnd) {
-      value =
-        1 -
-        (currentScroll - pauseEnd) /
-          (returnEnd - pauseEnd);
 
-      value = Math.min(1, Math.max(0, value));
-    }
-
-    /*
-     * COMPLETELY GONE
-     */
     else {
-      value = 0;
+      movement = 1;
+      visibility = 0;
     }
 
-    movementProgress.set(value);
+    movementProgress.set(movement);
+    visibilityProgress.set(visibility);
   });
 
   /*
@@ -227,10 +241,18 @@ export default function HeroAboutTransition() {
 
   /*
    * =========================================================
+   * SMOOTH VISIBILITY
+   * =========================================================
+   */
+
+  const opacity = useSpring(visibilityProgress, {
+    stiffness: 100,
+    damping: 25,
+  });
+
+  /*
+   * =========================================================
    * PORTRAIT POSITION
-   *
-   * 0 = HERO
-   * 1 = ABOUT ME
    * =========================================================
    */
 
@@ -254,17 +276,27 @@ export default function HeroAboutTransition() {
 
   /*
    * =========================================================
+   * HELLO BUBBLE MOVEMENT
+   * =========================================================
+   */
+
+  const helloY = useTransform(
+    progress,
+    [0, 0.62],
+    [0, -8]
+  );
+
+  const helloScale = useTransform(
+    progress,
+    [0, 0.62],
+    [1, 0.9]
+  );
+
+  /*
+   * =========================================================
    * 3D FLIP
    *
-   * The portrait flips TO THE BACK while entering About.
-   *
-   * Then flips BACK while leaving About.
-   *
-   * Because movementProgress goes:
-   *
-   * 0 → 1 → 0
-   *
-   * the flip automatically reverses.
+   * Front and back occupy the exact same rectangle.
    * =========================================================
    */
 
@@ -282,21 +314,8 @@ export default function HeroAboutTransition() {
 
   /*
    * =========================================================
-   * VISIBILITY
-   *
-   * Completely gone before Projects.
-   * =========================================================
-   */
-
-  const opacity = useTransform(
-    progress,
-    [0, 0.04, 0.12, 0.9, 1],
-    [0, 1, 1, 1, 0]
-  );
-
-  /*
-   * =========================================================
-   * HI / HAND
+   * HI → HAND
+   * Changes every 8 seconds
    * =========================================================
    */
 
@@ -309,164 +328,221 @@ export default function HeroAboutTransition() {
   }, []);
 
   return (
-    <motion.div
-      style={{
-        x,
-        y,
-        scale,
-        opacity,
-      }}
-      className="
-        pointer-events-none
-        fixed
-        left-1/2
-        top-[12%]
-        z-[100]
-        h-[475px]
-        w-[320px]
-        -translate-x-1/2
-        [perspective:1600px]
-        sm:h-[500px]
-        sm:w-[340px]
-        lg:h-[525px]
-        lg:w-[355px]
-      "
-    >
-      {/* =====================================================
-          3D IMAGE OBJECT
-      ===================================================== */}
+    <>
+      {/* =================================================
+          IMAGE
+      ================================================== */}
 
-      <div
+      <motion.div
+        style={{
+          x,
+          y,
+          scale,
+          opacity,
+        }}
         className="
-          relative
-          h-full
-          w-full
-          [transform-style:preserve-3d]
+          pointer-events-none
+          fixed
+          left-1/2
+          top-[48%]
+          z-30
+          h-[430px]
+          w-[260px]
+          -translate-x-1/2
+          [perspective:1600px]
+          sm:top-[16%]
+          sm:h-[500px]
+          sm:w-[340px]
+          lg:h-[525px]
+          lg:w-[355px]
         "
       >
-        {/* ===================================================
-            FRONT
-        =================================================== */}
-
-        <motion.div
-          style={{
-            rotateY: frontRotate,
-          }}
+        <div
           className="
-            absolute
-            inset-0
-            overflow-hidden
-            rounded-[17px]
-            [backface-visibility:hidden]
+            relative
+            h-full
+            w-full
+            [transform-style:preserve-3d]
           "
         >
-          <Image
-            src="/images/new.png"
-            alt="Abegnego Audu"
-            fill
-            priority
-            sizes="355px"
-            className="object-cover object-center"
-          />
-        </motion.div>
+          {/* =================================================
+              FRONT IMAGE
+          ================================================== */}
 
-        {/* ===================================================
-            BACK
-        =================================================== */}
-
-        <motion.div
-          style={{
-            rotateY: backRotate,
-          }}
-          className="
-            absolute
-            inset-0
-            overflow-hidden
-            rounded-[17px]
-            [backface-visibility:hidden]
-          "
-        >
-          <Image
-            src="/images/second.jpg"
-            alt="Abegnego Audu"
-            fill
-            sizes="355px"
-            className="object-cover object-center"
-          />
-        </motion.div>
-
-        {/* ===================================================
-            HI BUBBLE
-        =================================================== */}
-
-        <motion.div
-          className="
-            absolute
-            -right-[48px]
-            top-[31%]
-            z-[50]
-            flex
-            h-[100px]
-            w-[100px]
-            items-center
-            justify-center
-            rounded-full
-            bg-[#625DE2]
-            text-white
-            shadow-[0_15px_40px_rgba(0,0,0,0.14)]
-            dark:bg-[#B7FF3C]
-            dark:text-[#080B09]
-            sm:-right-[55px]
-            sm:h-[112px]
-            sm:w-[112px]
-          "
-        >
           <motion.div
-            key={showHand ? "hand" : "hi"}
-            initial={{
-              opacity: 0,
-              scale: 0.7,
+            style={{
+              rotateY: frontRotate,
             }}
+            className="
+              absolute
+              left-1/2
+              top-[12%]
+              h-[330px]
+              w-[220px]
+              -translate-x-1/2
+              overflow-hidden
+              rounded-[17px]
+              [backface-visibility:hidden]
+              sm:inset-0
+              sm:h-auto
+              sm:w-auto
+              sm:translate-x-0
+            "
+          >
+            <Image
+              src="/images/new.png"
+              alt="Abegnego Audu"
+              fill
+              priority
+              sizes="
+                (max-width: 640px) 220px,
+                (max-width: 768px) 280px,
+                (max-width: 1024px) 320px,
+                355px
+              "
+              className="object-cover object-center"
+            />
+          </motion.div>
+
+          {/* =================================================
+              BACK IMAGE
+          ================================================== */}
+
+          <motion.div
+            style={{
+              rotateY: backRotate,
+            }}
+            className="
+              absolute
+              left-1/2
+              top-[12%]
+              h-[330px]
+              w-[220px]
+              -translate-x-1/2
+              overflow-hidden
+              rounded-[17px]
+              [backface-visibility:hidden]
+              sm:inset-0
+              sm:h-auto
+              sm:w-auto
+              sm:translate-x-0
+            "
+          >
+            <Image
+              src="/images/second.jpg"
+              alt="Abegnego Audu"
+              fill
+              sizes="
+                (max-width: 640px) 220px,
+                (max-width: 768px) 280px,
+                (max-width: 1024px) 320px,
+                355px
+              "
+              className="object-cover object-center"
+            />
+          </motion.div>
+
+          {/* =================================================
+              HI / WHITE HAND
+              
+              Attached permanently to portrait on mobile.
+          ================================================== */}
+
+          <motion.div
+            style={{
+              y: helloY,
+              scale: helloScale,
+              opacity,
+            }}
+            className="
+              pointer-events-none
+              absolute
+              left-[calc(50%-130px)]
+              top-[340px]
+              z-[100]
+              flex
+              h-[80px]
+              w-[80px]
+              items-center
+              justify-center
+              rounded-full
+              sm:left-[-32px]
+              sm:top-auto
+              sm:bottom-0
+              sm:h-[95px]
+              sm:w-[95px]
+              md:h-[105px]
+              md:w-[105px]
+              lg:h-[115px]
+              lg:w-[115px]
+            "
             animate={{
-              opacity: 1,
-              scale: 1,
+              backgroundColor: "#625DE2",
             }}
             transition={{
-              duration: 0.45,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 0.7,
             }}
           >
             {showHand ? (
-              <span
-                role="img"
-                aria-label="waving hand"
+              <motion.span
+                key="hand"
+                initial={{
+                  opacity: 0,
+                  scale: 0.65,
+                  rotate: -12,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  rotate: 0,
+                }}
+                transition={{
+                  duration: 0.55,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 className="
                   select-none
-                  text-[42px]
+                  text-[38px]
+                  leading-none
                   grayscale
                   brightness-0
                   invert
+                  sm:text-[43px]
+                  md:text-[48px]
                 "
               >
                 👋
-              </span>
+              </motion.span>
             ) : (
-              <span
+              <motion.span
+                key="hi"
+                initial={{
+                  opacity: 0,
+                  scale: 0.65,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  duration: 0.5,
+                }}
                 className="
                   font-[var(--font-sans)]
-                  text-[35px]
+                  text-[29px]
                   font-medium
-                  tracking-[-0.06em]
+                  tracking-[-0.07em]
                   text-white
-                  dark:text-[#080B09]
+                  sm:text-[33px]
+                  md:text-[37px]
                 "
               >
                 Hi
-              </span>
+              </motion.span>
             )}
           </motion.div>
-        </motion.div>
-      </div>
-    </motion.div>
+        </div>
+      </motion.div>
+    </>
   );
 }
